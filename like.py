@@ -1,8 +1,10 @@
 import requests
+import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-BOT_TOKEN = "8119205692:AAGGEp8DMGHFNLXP8Gu1fe0oUP7GZQD_A8g"
+# Get token from environment variable
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Will be set in Render's environment variables
 PASTEBIN_RAW_URL = "https://pastebin.com/raw/MmbfWwcY"  # Replace with your actual Pastebin URL
 
 async def check_authorization(update: Update):
@@ -38,7 +40,7 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     uid = context.args[0]
-    url = f"https://fake-like-api.onrender.com/like?uid={uid}"
+    url = f"https://like-apirexx.up.railway.app/like?uid={uid}"
 
     try:
         response = requests.get(url)
@@ -82,6 +84,9 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"❌ Error:\n{str(e)}")
 
 def main():
+    if not BOT_TOKEN:
+        raise ValueError("TELEGRAM_BOT_TOKEN environment variable not set")
+        
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
