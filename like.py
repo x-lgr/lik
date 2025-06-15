@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # Get token from environment variable
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")  # Will be set in Render's environment variables
+BOT_TOKEN = os.getenv("TOKEN")  # Will be set in Render's environment variables
 PASTEBIN_RAW_URL = "https://pastebin.com/raw/MmbfWwcY"  # Replace with your actual Pastebin URL
 
 async def check_authorization(update: Update):
