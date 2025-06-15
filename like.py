@@ -40,7 +40,7 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     uid = context.args[0]
-    url = f"https://like-apirexx.up.railway.app/like?uid={uid}"
+    url = f"https://paid-api-xlgr.vercel.app/like?uid={uid}"
 
     try:
         response = requests.get(url)
