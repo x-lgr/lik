@@ -2,6 +2,18 @@ import requests
 import os
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from flask import Flask
+import threading
+
+# Initialize Flask app
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is alive and running!"
+
+def run_flask():
+    app.run(host='0.0.0.0', port=10000)
 
 # Get token from environment variable
 BOT_TOKEN = os.getenv("TOKEN")  # Will be set in Render's environment variables
@@ -73,7 +85,6 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         elif status == 404:
             msg = (
                 f"❌ UID DEKH KR DAAL CHUTIYE!\n"
-                
             )
         else:
             msg = "❓ Unknown status received."
@@ -86,13 +97,17 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     if not BOT_TOKEN:
         raise ValueError("TELEGRAM_BOT_TOKEN environment variable not set")
-        
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("like", process_uid))
-
-    app.run_polling()
+    
+    # Start Flask server in a separate thread
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+    
+    # Start Telegram bot
+    bot_app = ApplicationBuilder().token(BOT_TOKEN).build()
+    bot_app.add_handler(CommandHandler("start", start))
+    bot_app.add_handler(CommandHandler("like", process_uid))
+    bot_app.run_polling()
 
 if __name__ == "__main__":
     main()
