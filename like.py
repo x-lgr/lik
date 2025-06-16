@@ -63,7 +63,10 @@ MADE WITH ❤️ BY AAPKA APNA BHADWA DEVELOPER XLGR"""
         return "❌ Error processing UID!"
 
 # Auto-Like Daily at 4AM IST
-def auto_like_job(context: CallbackContext, uid: str, chat_id: int):
+def auto_like_job(context: CallbackContext):
+    job = context.job
+    uid = job.context['uid']
+    chat_id = job.context['chat_id']
     result = process_like(uid)
     context.bot.send_message(chat_id=chat_id, text=f"🔁 AUTO LIKE UPDATE:\n{result}")
 
@@ -93,30 +96,27 @@ async def auto_like(update: Update, context: CallbackContext):
     uid = context.args[0]
     
     # Remove old job if exists
-    if user_id in auto_like_tasks:
-        auto_like_tasks[user_id].shutdown()
+    if str(user_id) in auto_like_tasks:
+        auto_like_tasks[str(user_id)].schedule_removal()
     
     # Schedule new job (4AM Daily IST)
-    scheduler = BackgroundScheduler(timezone=pytz.timezone('Asia/Kolkata'))
-    scheduler.add_job(
+    job = context.job_queue.run_daily(
         auto_like_job,
-        trigger='cron',
-        hour=4,
-        minute=0,
-        args=[context, uid, user_id]
+        time=datetime.time(hour=4, minute=0, tzinfo=pytz.timezone('Asia/Kolkata')),
+        days=(0, 1, 2, 3, 4, 5, 6),
+        context={'uid': uid, 'chat_id': user_id}
     )
-    scheduler.start()
     
-    auto_like_tasks[user_id] = scheduler
+    auto_like_tasks[str(user_id)] = job
     await update.message.reply_text(f"""✅ Auto like setup successfully!
 🆔 UID: {uid}
 ⏰ Will run daily at 4 AM IST
 Use /stopauto to cancel""")
 
 async def stop_auto(update: Update, context: CallbackContext):
-    user_id = update.effective_user.id
+    user_id = str(update.effective_user.id)
     if user_id in auto_like_tasks:
-        auto_like_tasks[user_id].shutdown()
+        auto_like_tasks[user_id].schedule_removal()
         del auto_like_tasks[user_id]
         await update.message.reply_text("✅ Auto likes stopped successfully!")
     else:
