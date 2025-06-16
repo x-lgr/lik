@@ -1,6 +1,6 @@
-python-telegram-bot==20.6
+python-telegram-bot==13.7
 requests==2.31.0
-Flask==3.0.0
+Flask==2.3.2
 apscheduler==3.10.1
 pytz==2023.3
-schedule==1.2.0
+python-dotenv==1.0.0
