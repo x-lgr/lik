@@ -1,6 +1,7 @@
 import os
 import threading
 import requests
+import datetime
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 from flask import Flask
@@ -128,7 +129,7 @@ def main():
     threading.Thread(target=run_flask, daemon=True).start()
     
     # Start Telegram Bot
-    updater = Updater(BOT_TOKEN, use_context=True)
+    updater = Updater(BOT_TOKEN)
     dp = updater.dispatcher
     
     dp.add_handler(CommandHandler("start", start))
