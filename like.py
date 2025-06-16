@@ -109,5 +109,5 @@ def main():
     bot_app.add_handler(CommandHandler("like", process_uid))
     bot_app.run_polling()
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
