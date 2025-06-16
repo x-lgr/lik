@@ -29,12 +29,12 @@ async def check_authorization(update: Update):
         allowed_users = response.text.strip().splitlines()
         
         if user_id not in allowed_users:
-            await update.message.reply_text("❌ MY SON BINA PAISE K KUCH NHI HOTA,\nDM @xlgr158 50 RUPPESS ONLY USE UNLIMITED TIME")
+            await update.message.reply_text("❌ MY SON BINA PAISE K KUCH NHI HOTA.")
             return False
         return True
         
     except Exception as e:
-        await update.message.reply_text("⚠ Error verifying authorization. Please try later.")
+        await update.message.reply_text("⚠️ Error verifying authorization. Please try later.")
         return False
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -48,7 +48,7 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if not context.args:
-        await update.message.reply_text("⚠ Please provide a UID.\nUsage: /like <uid>")
+        await update.message.reply_text("⚠️ Please provide a UID.\nUsage: /like <uid>")
         return
 
     uid = context.args[0]
@@ -73,11 +73,11 @@ async def process_uid(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"➕ Likes Added: {data.get('likes_added')}\n"
                 f"🎯 Likes After: {data.get('likes_after')}\n"
                 f"🆔 UID: {data.get('uid')}\n"
-                f"MADE WITH ❤ BY AAPKA APNA BHADWA DEVELOPER XLGR"
+                f"MADE WITH ❤️ BY AAPKA APNA BHADWA DEVELOPER XLGR"
             )
         elif status == 2:
             msg = (
-                f"⚠ No Likes Added!\n"
+                f"⚠️ No Likes Added!\n"
                 f"🍆Iss Se Jyada Lauda Le Le Mera\n"
                 f"👤 Nickname: {data.get('nickname')}\n"
                 f"🆔 UID: {data.get('uid')}"
@@ -109,5 +109,5 @@ def main():
     bot_app.add_handler(CommandHandler("like", process_uid))
     bot_app.run_polling()
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     main()
