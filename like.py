@@ -29,7 +29,7 @@ async def check_authorization(update: Update):
         allowed_users = response.text.strip().splitlines()
         
         if user_id not in allowed_users:
-            await update.message.reply_text("❌ MY SON BINA PAISE K KUCH NHI HOTA.")
+            await update.message.reply_text("❌ MY SON BINA PAISE K KUCH NHI HOTA,\nDM @xlgr158 50 RUPPESS ONLY USE UNLIMITED TIME")
             return False
         return True
         
